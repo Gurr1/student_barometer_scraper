@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Student Barometer resultat</title>
+</head>
+<body>
+    {% for division in result.keys()%}
+    <div>
+        <h1>
+            {{division}}
+            <progress id="division_count" value='{{result[division]["answers"]}}' max='{{result[division]["total"]}}'>
+
+            </progress>
+            {{result[division]["answers"]}} / {{result[division]["total"]}} ({{result[division]["percent"]}}%)
+        </h1>
+        {% for subdivision in result[division]["sub_divisions"]%}
+        <h3>
+            {{ subdivision }}
+            <progress id="sub_division_count"
+                      value='{{result[division]["sub_divisions"][subdivision]["answers"]}}'
+                      max='{{result[division]["sub_divisions"][subdivision]["total"]}}'></progress>
+        </h3>
+        {% endfor %}
+    </div>
+    {% endfor %}
+</body>
+</html>
