@@ -3,24 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Student Barometer resultat</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
 <body>
     {% for division in result.keys()%}
-    <div>
-        <h1>
-            {{division}}
-            <progress id="division_count" value='{{result[division]["answers"]}}' max='{{result[division]["total"]}}'>
-
-            </progress>
-            {{result[division]["answers"]}} / {{result[division]["total"]}} ({{result[division]["percent"]}}%)
-        </h1>
-        {% for subdivision in result[division]["sub_divisions"]%}
-        <h3>
-            {{ subdivision }}
-            <progress id="sub_division_count"
-                      value='{{result[division]["sub_divisions"][subdivision]["answers"]}}'
-                      max='{{result[division]["sub_divisions"][subdivision]["total"]}}'></progress>
-        </h3>
+    <div class="container-fluid">
+        <div>
+            <h1>
+                {{division}}
+            </h1>
+                <progress id="division_count" value='{{result[division]["answers"]}}' max='{{result[division]["total"]}}'>
+                </progress>
+            <h1>
+                {{result[division]["answers"]}} / {{result[division]["total"]}} ({{result[division]["percent"]}}%)
+            </h1>
+        </div>
+            {% for subdivision in result[division]["sub_divisions"]%}
+        <div class="container-fluid">
+            <h3>
+                {{ subdivision }}
+                <progress id="sub_division_count"
+                          value='{{result[division]["sub_divisions"][subdivision]["answers"]}}'
+                          max='{{result[division]["sub_divisions"][subdivision]["total"]}}'></progress>
+                {{result[division]["sub_divisions"][subdivision]["answers"]}} / {{result[division]["sub_divisions"][subdivision]["total"]}}
+            </h3>
+        </div>
         {% endfor %}
     </div>
     {% endfor %}
