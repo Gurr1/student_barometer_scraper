@@ -2,13 +2,12 @@ from bs4 import BeautifulSoup as bs
 import requests
 import re
 from flask import Flask, render_template
-
-url = "https://dm.quicksearch.se/QSNetComponents/QS.Org/default.aspx?HolderGroupId=%7BB1D742BA-92A6-49A3-AFC5-FAD6D7016860%7D&RootGroupdId=%7BE4F30D0D-D812-4EE8-AAB4-89E4C2204C03%7D&ContractId=%7BABF0D62C-E7EA-419A-AD76-C7EADAA134E5%7D&LanguageId=%7BA1DE86C9-934F-4FCE-B753-9F01AEDBB8BE%7D&UserId=%7BD5113524-69DA-43BA-A898-36F2678CA2C7%7D&circular_id=%7B7EB91046-7E2B-4112-ABDD-864EC69EC9C5%7D&Freq=True&antiCsrfToken=11151249041l163190"
-programs = {"IT": ["TKITE", "MPIDE", "MPSOF", "MPDSC"]}
+import config_loader as cl
 
 app = Flask(__name__)
 
 def get_program_answers(request):
+    programs = cl.get_divisions()
     program_answers = {}
     parser = bs(request, "html.parser")
     answers_reg = re.compile(r"[a-zA-Z]*\s\((\d+)/(\d+)")
@@ -24,7 +23,7 @@ def get_program_answers(request):
                     answers = int(answers)
                     total = int(total)
                     p = program_answers[program_name]["sub_divisions"]
-                    p[sub_program] = {"answers": answers, "total": total, "percent": answers/total*100}
+                    p[sub_program] = {"answers": answers, "total": total, "percent": int(answers/total*100)}
     return program_answers
 
 def count_total(division_dict):
@@ -37,6 +36,7 @@ def count_total(division_dict):
     return (answers, total)
 
 def get_data():
+    url = cl.get_url()
     req = requests.get(url)
     program_answers = get_program_answers(req.text)
     for key in program_answers.keys():
@@ -53,4 +53,4 @@ def get_answers():
     return render_template("index.html", result=data)
 
 if __name__ == "__main__":
-   app.run(host='0.0.0.0')
+    app.run(host='0.0.0.0')
