@@ -4,34 +4,58 @@
     <meta charset="UTF-8">
     <title>Student Barometer resultat</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+          integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="/static/index.css">
 </head>
 <body>
-    {% for division in result.keys()%}
-    <div class="container-fluid">
-        <div>
-            <h1>
-                {{division}}
-            </h1>
-                <progress id="division_count" value='{{result[division]["answers"]}}' max='{{result[division]["total"]}}'>
-                </progress>
-            <h1>
-                {{result[division]["answers"]}} / {{result[division]["total"]}} ({{result[division]["percent"]}}%)
-            </h1>
+<div class="card-header card-header-pc" style="background-color: #ffffff; ">
+    {% for division in result.keys() %}
+        <div class="card card-body" style="padding-left: 50px; padding-right: 50px; margin-bottom: 20px; background-color: #e2ecee ">
+            <div class = "text-center">
+                <h1>
+                    {{ division }}
+                </h1>
+                <div class="progress" style="text-align: center; margin-right: 10px; margin-left: 10px; height: 1.5rem; background-color: white">
+                    <span class="text-center large-font" style="width: 100%; color: #1a1a1a; position: absolute; top: 73px; right: 0; left: 0">
+                        {{ result[division]["answers"] }} / {{ result[division]["total"] }}
+                        ({{ result[division]["percent"] }}%)
+                    </span>
+                    <div class="progress-bar" role="progressbar" id="division_count"
+                         aria-valuenow='{{ result[division]["answers"] }}'
+                         aria-valuemax='{{ result[division]["total"] }}'
+                         aria-valuemin="0" style="width: {{ result[division]["percent"] }}%; background-color: #51aae2">
+                    </div>
+                </div>
+            </div>
+        <hr style="text-align: center">
+            <div class="row justify-content-center">
+                {% for subdivision in result[division]["sub_divisions"] %}
+                    <div class="col-sm-3 text-center" style="margin-top: 20px">
+                        <h3 class="text-center">
+                            {{ subdivision }}
+                        </h3>
+                        <div class="progress" style="text-align: center; height: 1rem; background-color: white">
+                            <span class="text-center" style="width: 100%; color: #1a1a1a; position:absolute; right:0; left:0;">
+                        {{ result[division]["sub_divisions"][subdivision]["answers"] }} / {{ result[division]["sub_divisions"][subdivision]["total"] }}
+                        ({{ result[division]["sub_divisions"][subdivision]["percent"] }}%)
+                            </span>
+                            <div class="progress-bar" role="progressbar" id="sub_division_count"
+                                 aria-valuenow='{{ result[division]["sub_divisions"][subdivision]["answers"] }}'
+                                 aria-valuemax='{{ result[division]["sub_divisions"][subdivision]["total"] }}'
+                                 aria-valuemin="0" style="height: 1rem; width: {{ result[division]["sub_divisions"][subdivision]["percent"] }}%; background-color: #51aae2">
+                            </div>
+
+                        </div>
+                    </div>
+
+                {% endfor %}
+            </div>
         </div>
-            {% for subdivision in result[division]["sub_divisions"]%}
-        <div class="container-fluid">
-            <h3>
-                {{ subdivision }}
-                <progress id="sub_division_count"
-                          value='{{result[division]["sub_divisions"][subdivision]["answers"]}}'
-                          max='{{result[division]["sub_divisions"][subdivision]["total"]}}'></progress>
-                {{result[division]["sub_divisions"][subdivision]["answers"]}} / {{result[division]["sub_divisions"][subdivision]["total"]}}
-            </h3>
-        </div>
-        {% endfor %}
-    </div>
+
     {% endfor %}
+</div>
+
 </body>
 </html>
