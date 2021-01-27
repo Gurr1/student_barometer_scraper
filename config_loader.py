@@ -3,7 +3,7 @@ import os
 
 config_path = os.getenv("BAROMETER_CONFIG")
 if config_path is None:
-    config_path = "config.yml"
+    config_path = "config/config.yml"
 with open(config_path) as config_file:
     config = yaml.load(config_file, Loader=yaml.FullLoader)
 
